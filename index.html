@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Авто План</title>
+
+  <meta name="theme-color" content="#050816" />
+  <meta name="description" content="План накопления на авто 350 000 ₽." />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Авто План" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="format-detection" content="telephone=no" />
+
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="apple-touch-icon" href="./icon-180.png" />
+  <link rel="icon" href="./icon-192.png" />
+  <link rel="shortcut icon" href="./icon-192.png" />
+
+  <style>
+    :root {
+      --bg: #050816;
+      --panel: rgba(15, 23, 42, 0.92);
+      --panel-2: rgba(30, 41, 59, 0.9);
+      --panel-3: rgba(2, 6, 23, 0.54);
+      --border: rgba(148, 163, 184, 0.2);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --muted-2: #cbd5e1;
+      --gold: #facc15;
+      --orange: #fb923c;
+      --green: #22c55e;
+      --blue: #38bdf8;
+      --red: #fb7185;
+      --purple: #a78bfa;
+      --cyan: #67e8f9;
+      --radius-xl: 28px;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 5%, rgba(250, 204, 21, 0.16), transparent 30%),
+        radial-gradient(circle at 90% 10%, rgba(56, 189, 248, 0.13), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(167, 139, 250, 0.12), transparent 32%),
+        linear-gradient(180deg, #050816, #0f172a 58%, #020617);
+    }
+
+    body {
+      min-height: 100svh;
+      padding: 12px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .phone {
+      width: min(440px, 100%);
+      height: min(920px, calc(100svh - 24px));
+      min-height: 650px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 36px;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      background:
+        linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(2, 6, 23, 0.98)),
+        radial-gradient(circle at top, rgba(250, 204, 21, 0.08), transparent 40%);
+      box-shadow: var(--shadow);
+    }
+
+    @media (display-mode: standalone) {
+      body {
+        padding: 0;
+      }
+
+      .phone {
+        width: 100%;
+        height: 100svh;
+        min-height: 100svh;
+        max-height: none;
+        border-radius: 0;
+        border: 0;
+      }
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      width: 360px;
+      height: 220px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: rgba(250, 204, 21, 0.14);
+      filter: blur(34px);
+      pointer-events: none;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(16px + var(--safe-bottom));
+      gap: 12px;
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 17px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      background: linear-gradient(135deg, var(--gold), var(--orange));
+      color: #111827;
+      font-size: 25px;
+      box-shadow: 0 0 28px rgba(250, 204, 21, 0.28);
+    }
+
+    .title {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .title small {
+      display: block;
+      color: var(--gold);
+      font-weight: 900;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .title h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: -0.055em;
+    }
+
+    .save-chip,
+    .install-chip {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(34, 197, 94, 0.22);
+      color: #86efac;
+      background: rgba(34, 197, 94, 0.12);
+      font-size: 18px;
+      flex: 0 0 auto;
+    }
+
+    .install-chip {
+      border-color: rgba(250, 204, 21, 0.2);
+      color: #fef3c7;
+      background: rgba(250, 204, 21, 0.1);
+      cursor: pointer;
+    }
+
+    .screen {
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 12px;
+    }
+
+    .mission {
+      border-radius: 18px;
+      border: 1px solid rgba(250, 204, 21, 0.18);
+      background: rgba(250, 204, 21, 0.08);
+      color: #fef3c7;
+      padding: 11px 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-weight: 900;
+      font-size: 13px;
+      line-height: 1.28;
+      margin-bottom: 10px;
+    }
+
+    .mission span {
+      font-size: 19px;
+      flex: 0 0 auto;
+    }
+
+    .goal {
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(180deg, rgba(30, 41, 59, 0.78), rgba(15, 23, 42, 0.9)),
+        radial-gradient(circle at 82% 20%, rgba(250, 204, 21, 0.12), transparent 36%);
+      padding: 14px;
+    }
+
+    .goal-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .goal-money {
+      font-size: clamp(31px, 10vw, 44px);
+      line-height: 0.94;
+      font-weight: 1000;
+      letter-spacing: -0.07em;
+    }
+
+    .percent-badge {
+      min-width: 78px;
+      text-align: center;
+      padding: 10px 11px;
+      border-radius: 18px;
+      color: #111827;
+      background: linear-gradient(135deg, var(--gold), var(--orange));
+      box-shadow: 0 10px 24px rgba(250, 204, 21, 0.18);
+    }
+
+    .percent-badge span {
+      display: block;
+      font-size: 25px;
+      line-height: 1;
+      font-weight: 1000;
+      letter-spacing: -0.06em;
+    }
+
+    .percent-badge small {
+      font-size: 10px;
+      font-weight: 950;
+      opacity: 0.78;
+    }
+
+    .progress-shell {
+      height: 18px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(51, 65, 85, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--gold), var(--orange), var(--green));
+      box-shadow: 0 0 20px rgba(250, 204, 21, 0.36);
+      transition: width 0.5s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .milestones {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+      margin-top: 8px;
+    }
+
+    .milestone {
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.18);
+      overflow: hidden;
+    }
+
+    .milestone.done {
+      background: linear-gradient(90deg, var(--gold), var(--green));
+      box-shadow: 0 0 12px rgba(250, 204, 21, 0.25);
+    }
+
+    .motivation {
+      margin-top: 10px;
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(250, 204, 21, 0.09);
+      border: 1px solid rgba(250, 204, 21, 0.16);
+      color: #fef3c7;
+      font-size: 13px;
+      font-weight: 850;
+      line-height: 1.3;
+    }
+
+    .content {
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .tab-panel {
+      display: none;
+      height: 100%;
+      min-height: 0;
+      overflow: auto;
+      padding-right: 2px;
+      scrollbar-width: thin;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .tab-panel::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .tab-panel::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.25);
+      border-radius: 999px;
+    }
+
+    .compact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .card {
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      padding: 13px;
+      min-height: 92px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      right: -26px;
+      bottom: -34px;
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      opacity: 0.11;
+      background: var(--accent, var(--gold));
+      pointer-events: none;
+    }
+
+    .card.wide {
+      grid-column: 1 / -1;
+    }
+
+    .card-name {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .card-icon {
+      color: var(--accent, var(--gold));
+    }
+
+    .card-value {
+      font-size: clamp(23px, 7vw, 32px);
+      line-height: 1;
+      font-weight: 1000;
+      letter-spacing: -0.06em;
+    }
+
+    .card-note {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.28;
+    }
+
+    .system-card {
+      grid-column: 1 / -1;
+      border-radius: 20px;
+      padding: 13px;
+      border: 1px solid rgba(103, 232, 249, 0.18);
+      background:
+        linear-gradient(135deg, rgba(103, 232, 249, 0.09), rgba(2, 6, 23, 0.48));
+    }
+
+    .system-title {
+      color: #cffafe;
+      font-size: 13px;
+      font-weight: 950;
+      margin-bottom: 8px;
+    }
+
+    .system-text {
+      color: var(--muted-2);
+      font-size: 12px;
+      line-height: 1.38;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+    }
+
+    .btn {
+      min-height: 52px;
+      border: 0;
+      border-radius: 18px;
+      cursor: pointer;
+      font-weight: 950;
+      color: var(--text);
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.14s ease, opacity 0.14s ease, filter 0.14s ease;
+      user-select: none;
+    }
+
+    .btn:active {
+      transform: scale(0.985);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .btn-main {
+      grid-column: 1 / -1;
+      min-height: 60px;
+      color: #111827;
+      background: linear-gradient(135deg, var(--gold), var(--orange));
+      box-shadow: 0 16px 30px rgba(250, 204, 21, 0.18);
+      font-size: 16px;
+    }
+
+    .btn-soft {
+      background: rgba(30, 41, 59, 0.92);
+      border: 1px solid var(--border);
+    }
+
+    .btn-red {
+      background: rgba(251, 113, 133, 0.12);
+      border: 1px solid rgba(251, 113, 133, 0.22);
+      color: #fecdd3;
+    }
+
+    .nav {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      padding: 7px;
+      border-radius: 24px;
+      background: rgba(2, 6, 23, 0.62);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .nav-btn {
+      border: 0;
+      min-height: 48px;
+      border-radius: 18px;
+      color: var(--muted-2);
+      background: transparent;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 900;
+      display: grid;
+      place-items: center;
+      gap: 2px;
+      padding: 5px 3px;
+    }
+
+    .nav-btn span {
+      display: block;
+      font-size: 17px;
+      line-height: 1;
+    }
+
+    .nav-btn.active {
+      background: rgba(250, 204, 21, 0.13);
+      color: #fef3c7;
+      border: 1px solid rgba(250, 204, 21, 0.16);
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .row {
+      border-radius: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      background: var(--panel-3);
+      padding: 13px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .row span {
+      color: var(--muted-2);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .row strong {
+      font-size: 18px;
+      letter-spacing: -0.035em;
+      white-space: nowrap;
+    }
+
+    .explain {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .explain-item {
+      border-radius: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      background: var(--panel-3);
+      padding: 13px;
+      color: var(--muted-2);
+      font-size: 13px;
+      line-height: 1.42;
+    }
+
+    .explain-item b {
+      color: var(--text);
+    }
+
+    .oath {
+      border-radius: 22px;
+      border: 1px solid rgba(250, 204, 21, 0.18);
+      background:
+        radial-gradient(circle at 90% 10%, rgba(250, 204, 21, 0.12), transparent 35%),
+        rgba(2, 6, 23, 0.5);
+      padding: 15px;
+      margin-bottom: 10px;
+    }
+
+    .oath-title {
+      color: #fef3c7;
+      font-weight: 1000;
+      font-size: 17px;
+      letter-spacing: -0.025em;
+      margin-bottom: 8px;
+    }
+
+    .oath-text {
+      color: var(--muted-2);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .rule-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .rule {
+      display: flex;
+      gap: 11px;
+      align-items: flex-start;
+      border-radius: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      background: var(--panel-3);
+      padding: 13px;
+    }
+
+    .rule-icon {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 auto;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: rgba(250, 204, 21, 0.11);
+      border: 1px solid rgba(250, 204, 21, 0.14);
+    }
+
+    .rule b {
+      display: block;
+      color: var(--text);
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
+
+    .rule span {
+      color: var(--muted-2);
+      font-size: 12px;
+      line-height: 1.38;
+    }
+
+    .install-card {
+      border-radius: 22px;
+      border: 1px solid rgba(250, 204, 21, 0.18);
+      background:
+        radial-gradient(circle at 90% 10%, rgba(250, 204, 21, 0.12), transparent 35%),
+        rgba(2, 6, 23, 0.5);
+      padding: 15px;
+      margin-bottom: 10px;
+    }
+
+    .install-title {
+      color: #fef3c7;
+      font-weight: 1000;
+      font-size: 17px;
+      letter-spacing: -0.025em;
+      margin-bottom: 8px;
+    }
+
+    .install-card p,
+    .install-card li {
+      color: var(--muted-2);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .install-card ol {
+      margin: 10px 0 0;
+      padding-left: 22px;
+    }
+
+    .standalone-ok {
+      display: none;
+    }
+
+    @media (display-mode: standalone) {
+      .browser-only {
+        display: none;
+      }
+
+      .standalone-ok {
+        display: block;
+      }
+    }
+
+    .history-list {
+      display: grid;
+      gap: 9px;
+      padding-bottom: 4px;
+    }
+
+    .history-item {
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      background: var(--panel-3);
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      color: var(--muted-2);
+      font-size: 13px;
+    }
+
+    .history-item strong {
+      color: var(--text);
+    }
+
+    .empty {
+      min-height: 180px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.45;
+      border-radius: 20px;
+      border: 1px dashed rgba(148, 163, 184, 0.18);
+      background: rgba(2, 6, 23, 0.28);
+      padding: 18px;
+    }
+
+    .done-banner {
+      display: none;
+      border-radius: 20px;
+      border: 1px solid rgba(34, 197, 94, 0.22);
+      background: rgba(34, 197, 94, 0.1);
+      color: #dcfce7;
+      padding: 13px;
+      font-size: 13px;
+      line-height: 1.36;
+      font-weight: 850;
+      margin-bottom: 10px;
+    }
+
+    .done-banner.show {
+      display: block;
+    }
+
+    .toast {
+      position: absolute;
+      z-index: 20;
+      left: 50%;
+      bottom: calc(96px + var(--safe-bottom));
+      width: calc(100% - 32px);
+      max-width: 390px;
+      transform: translateX(-50%) translateY(18px);
+      opacity: 0;
+      pointer-events: none;
+      border-radius: 18px;
+      padding: 12px 14px;
+      text-align: center;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.24);
+      box-shadow: var(--shadow);
+      color: #fef3c7;
+      font-weight: 900;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .coin-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 16;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .coin {
+      position: absolute;
+      left: 50%;
+      bottom: 118px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 32% 28%, #fff7ad, #facc15 46%, #b45309);
+      box-shadow: 0 0 18px rgba(250, 204, 21, 0.74);
+      animation: coinFly 880ms ease-out forwards;
+    }
+
+    @keyframes coinFly {
+      from {
+        opacity: 0;
+        transform: translate(0, 0) scale(0.6) rotate(0deg);
+      }
+      18% {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+        transform: translate(var(--x), var(--y)) scale(1.1) rotate(420deg);
+      }
+    }
+
+    @media (max-height: 730px) {
+      .phone {
+        border-radius: 26px;
+      }
+
+      .app {
+        padding: 12px;
+        gap: 9px;
+      }
+
+      .top {
+        gap: 10px;
+      }
+
+      .logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 15px;
+      }
+
+      .title h1 {
+        font-size: 22px;
+      }
+
+      .mission {
+        padding: 9px 10px;
+        font-size: 12px;
+        margin-bottom: 8px;
+      }
+
+      .goal {
+        padding: 12px;
+      }
+
+      .goal-money {
+        font-size: 32px;
+      }
+
+      .motivation {
+        font-size: 12px;
+        min-height: 34px;
+      }
+
+      .card {
+        min-height: 82px;
+        padding: 11px;
+      }
+
+      .btn {
+        min-height: 47px;
+      }
+
+      .btn-main {
+        min-height: 53px;
+      }
+
+      .nav-btn {
+        min-height: 43px;
+      }
+    }
+
+    @media (min-width: 760px) {
+      body {
+        padding: 20px;
+      }
+
+      .phone {
+        height: min(920px, calc(100svh - 40px));
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="phone">
+    <div class="coin-layer" id="coinLayer"></div>
+
+    <div class="app">
+      <header class="top">
+        <div class="logo">🚗</div>
+        <div class="title">
+          <small>Режим неизбежности</small>
+          <h1>Авто План</h1>
+        </div>
+        <button class="install-chip" id="installHelpBtn" title="Как установить">↗</button>
+        <div class="save-chip" title="Прогресс сохраняется">✓</div>
+      </header>
+
+      <section class="screen">
+        <article class="goal">
+          <div class="mission">
+            <span>🔒</span>
+            <div id="missionText">Решение уже принято: 3 800 ₽ с каждой смены уходят в авто.</div>
+          </div>
+
+          <div class="goal-head">
+            <div>
+              <div class="label">Несгораемая цель</div>
+              <div class="goal-money">350 000 ₽</div>
+            </div>
+
+            <div class="percent-badge">
+              <span id="progressPercent">0%</span>
+              <small>готово</small>
+            </div>
+          </div>
+
+          <div class="progress-shell" aria-label="Прогресс накопления">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+
+          <div class="milestones" aria-label="Вехи прогресса">
+            <div class="milestone" id="m25"></div>
+            <div class="milestone" id="m50"></div>
+            <div class="milestone" id="m75"></div>
+            <div class="milestone" id="m100"></div>
+          </div>
+
+          <div class="motivation" id="motivationText">
+            Начало положено. Главное — не сбиться.
+          </div>
+        </article>
+
+        <section class="content">
+          <div class="tab-panel active" id="tabOverview">
+            <div class="done-banner" id="doneBanner">
+              Цель достигнута. Можно выбирать авто и сравнивать варианты.
+            </div>
+
+            <div class="compact-grid">
+              <article class="card" style="--accent: var(--green)">
+                <div class="card-name">
+                  <span>Уже в банке</span>
+                  <span class="card-icon">💰</span>
+                </div>
+                <div class="card-value" id="savedMoney">0 ₽</div>
+                <div class="card-note">Эти деньги считаются уже не твоими расходными</div>
+              </article>
+
+              <article class="card" style="--accent: var(--red)">
+                <div class="card-name">
+                  <span>Осталось закрыть</span>
+                  <span class="card-icon">🎯</span>
+                </div>
+                <div class="card-value" id="leftMoney">350 000 ₽</div>
+                <div class="card-note" id="overGoalNote">До цели</div>
+              </article>
+
+              <article class="card" style="--accent: var(--blue)">
+                <div class="card-name">
+                  <span>Смен выполнено</span>
+                  <span class="card-icon">✅</span>
+                </div>
+                <div class="card-value" id="workedShifts">0</div>
+                <div class="card-note">Каждая смена = шаг без обсуждений</div>
+              </article>
+
+              <article class="card" style="--accent: var(--gold)">
+                <div class="card-name">
+                  <span>Осталось смен</span>
+                  <span class="card-icon">⏳</span>
+                </div>
+                <div class="card-value" id="leftShifts">93</div>
+                <div class="card-note"><span id="leftDays">139</span> дней · финиш: <span id="finishDate">—</span></div>
+              </article>
+
+              <article class="card wide" style="--accent: var(--purple)">
+                <div class="card-name">
+                  <span>Деньги себе</span>
+                  <span class="card-icon">🛡️</span>
+                </div>
+                <div class="card-value" id="selfMoney">0 ₽</div>
+                <div class="card-note">Это защита плана: 1 010 ₽ остаётся на жизнь, чтобы не трогать авто</div>
+              </article>
+
+              <article class="system-card">
+                <div class="system-title" id="systemTitle">Статус системы: запуск</div>
+                <div class="system-text" id="systemText">
+                  Ты не пытаешься накопить. Ты выполняешь систему: смена → 3 800 ₽ в авто → прогресс растёт.
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="tabIntent">
+            <div class="oath">
+              <div class="oath-title">Договор с собой</div>
+              <div class="oath-text">
+                Я не решаю после каждой смены, откладывать или нет. Решение уже принято.
+                С каждой смены 3 800 ₽ уходят в авто. Я оставляю себе 1 010 ₽, чтобы план был устойчивым.
+                Авто — не мечта, а результат 93 выполненных смен.
+              </div>
+            </div>
+
+            <div class="rule-list">
+              <div class="rule">
+                <div class="rule-icon">🔒</div>
+                <div>
+                  <b>Правило несгораемого банка</b>
+                  <span>Деньги на авто не считаются свободными. Они уже принадлежат цели.</span>
+                </div>
+              </div>
+
+              <div class="rule">
+                <div class="rule-icon">⚙️</div>
+                <div>
+                  <b>Правило автомата</b>
+                  <span>После смены не нужно думать. Нажал “Добавить смену” — план обновился.</span>
+                </div>
+              </div>
+
+              <div class="rule">
+                <div class="rule-icon">🛡️</div>
+                <div>
+                  <b>Правило запаса</b>
+                  <span>1 010 ₽ себе нужны, чтобы еда, транспорт, связь и мелкие проблемы не ломали накопление.</span>
+                </div>
+              </div>
+
+              <div class="rule">
+                <div class="rule-icon">🏁</div>
+                <div>
+                  <b>Правило финиша</b>
+                  <span>Осталось не “очень много денег”, а конкретное количество смен: <span id="intentLeftShifts">93</span>.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="tabPlan">
+            <div class="list">
+              <div class="row">
+                <span>Зарплата</span>
+                <strong>370 ₽/час</strong>
+              </div>
+              <div class="row">
+                <span>Рабочий день</span>
+                <strong>13 часов</strong>
+              </div>
+              <div class="row">
+                <span>Доход за смену</span>
+                <strong>4 810 ₽</strong>
+              </div>
+              <div class="row">
+                <span>График</span>
+                <strong>4/2</strong>
+              </div>
+              <div class="row">
+                <span>На авто в месяц</span>
+                <strong>76 000 ₽</strong>
+              </div>
+              <div class="row">
+                <span>Себе в месяц</span>
+                <strong>20 200 ₽</strong>
+              </div>
+              <div class="row">
+                <span>Срок накопления</span>
+                <strong>93 смены</strong>
+              </div>
+              <div class="row">
+                <span>Примерно по календарю</span>
+                <strong>139 дней</strong>
+              </div>
+            </div>
+
+            <div class="explain">
+              <div class="explain-item">
+                <b>График 4/2 выбран, чтобы было больше отдыха.</b><br />
+                Так меньше риск перегореть и бросить план.
+              </div>
+
+              <div class="explain-item">
+                <b>3 800 ₽ на авто — безопаснее, чем откладывать максимум.</b><br />
+                План сильный, но не забирает вообще все деньги.
+              </div>
+
+              <div class="explain-item">
+                <b>1 010 ₽ себе — запас на жизнь.</b><br />
+                Еда, транспорт, связь, лекарства и мелкие проблемы не ломают накопление.
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="tabHistory">
+            <div id="historyList" class="history-list">
+              <div class="empty">Пока нет смен.<br />Нажми “Добавить смену”, и история появится здесь.</div>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="tabInstall">
+            <div class="install-card browser-only">
+              <div class="install-title">Установка на iPhone</div>
+              <p>Чтобы приложение выглядело как отдельное, открой эту страницу в Safari и добавь её на экран Домой.</p>
+              <ol>
+                <li>Открой страницу в Safari.</li>
+                <li>Нажми кнопку “Поделиться”.</li>
+                <li>Выбери “На экран Домой”.</li>
+                <li>Название: “Авто План”.</li>
+                <li>Нажми “Добавить”.</li>
+              </ol>
+            </div>
+
+            <div class="install-card standalone-ok">
+              <div class="install-title">Приложение уже установлено</div>
+              <p>Оно открыто в режиме отдельного приложения. Прогресс сохраняется на устройстве и работает офлайн после первой загрузки.</p>
+            </div>
+
+            <div class="rule-list">
+              <div class="rule">
+                <div class="rule-icon">📱</div>
+                <div>
+                  <b>Без адресной строки</b>
+                  <span>После добавления на экран Домой приложение открывается отдельно от обычной вкладки Safari.</span>
+                </div>
+              </div>
+              <div class="rule">
+                <div class="rule-icon">💾</div>
+                <div>
+                  <b>Сохранение прогресса</b>
+                  <span>Данные хранятся локально на iPhone через localStorage.</span>
+                </div>
+              </div>
+              <div class="rule">
+                <div class="rule-icon">📴</div>
+                <div>
+                  <b>Офлайн-режим</b>
+                  <span>После первой загрузки основные файлы кэшируются service worker.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="actions">
+          <button class="btn btn-main" id="addShiftBtn">
+            <span>➕</span>
+            <span>Добавить смену</span>
+          </button>
+
+          <button class="btn btn-soft" id="undoShiftBtn">
+            <span>↩</span>
+            <span>Отменить</span>
+          </button>
+
+          <button class="btn btn-red" id="resetBtn">
+            <span>🗑</span>
+            <span>Сбросить</span>
+          </button>
+        </section>
+      </section>
+
+      <nav class="nav" aria-label="Вкладки приложения">
+        <button class="nav-btn active" data-tab="overview">
+          <span>🏠</span>
+          Обзор
+        </button>
+        <button class="nav-btn" data-tab="intent">
+          <span>🔒</span>
+          Намерение
+        </button>
+        <button class="nav-btn" data-tab="plan">
+          <span>📋</span>
+          План
+        </button>
+        <button class="nav-btn" data-tab="history">
+          <span>🕘</span>
+          История
+        </button>
+      </nav>
+    </div>
+
+    <div class="toast" id="toast">Готово</div>
+  </main>
+
+  <script>
+    "use strict";
+
+    const CONFIG = {
+      goal: 350000,
+      savePerShift: 3800,
+      selfPerShift: 1010,
+      totalPlanShifts: 93,
+      totalPlanDays: 139,
+      storageKey: "autoSavingPlan.v1"
+    };
+
+    const state = {
+      workedShifts: 0,
+      history: []
+    };
+
+    const el = {
+      missionText: document.getElementById("missionText"),
+      progressPercent: document.getElementById("progressPercent"),
+      progressFill: document.getElementById("progressFill"),
+      motivationText: document.getElementById("motivationText"),
+      savedMoney: document.getElementById("savedMoney"),
+      leftMoney: document.getElementById("leftMoney"),
+      overGoalNote: document.getElementById("overGoalNote"),
+      workedShifts: document.getElementById("workedShifts"),
+      leftShifts: document.getElementById("leftShifts"),
+      leftDays: document.getElementById("leftDays"),
+      finishDate: document.getElementById("finishDate"),
+      selfMoney: document.getElementById("selfMoney"),
+      doneBanner: document.getElementById("doneBanner"),
+      systemTitle: document.getElementById("systemTitle"),
+      systemText: document.getElementById("systemText"),
+      intentLeftShifts: document.getElementById("intentLeftShifts"),
+      historyList: document.getElementById("historyList"),
+      addShiftBtn: document.getElementById("addShiftBtn"),
+      undoShiftBtn: document.getElementById("undoShiftBtn"),
+      resetBtn: document.getElementById("resetBtn"),
+      installHelpBtn: document.getElementById("installHelpBtn"),
+      toast: document.getElementById("toast"),
+      coinLayer: document.getElementById("coinLayer"),
+      milestones: [
+        document.getElementById("m25"),
+        document.getElementById("m50"),
+        document.getElementById("m75"),
+        document.getElementById("m100")
+      ],
+      navBtns: document.querySelectorAll(".nav-btn"),
+      tabs: {
+        overview: document.getElementById("tabOverview"),
+        intent: document.getElementById("tabIntent"),
+        plan: document.getElementById("tabPlan"),
+        history: document.getElementById("tabHistory"),
+        install: document.getElementById("tabInstall")
+      }
+    };
+
+    function rub(value) {
+      return new Intl.NumberFormat("ru-RU").format(Math.round(value)) + " ₽";
+    }
+
+    function number(value) {
+      return new Intl.NumberFormat("ru-RU").format(Math.round(value));
+    }
+
+    function savedMoney() {
+      return state.workedShifts * CONFIG.savePerShift;
+    }
+
+    function selfMoney() {
+      return state.workedShifts * CONFIG.selfPerShift;
+    }
+
+    function progress(saved) {
+      return Math.min((saved / CONFIG.goal) * 100, 100);
+    }
+
+    function leftShifts(saved) {
+      return Math.ceil(Math.max(CONFIG.goal - saved, 0) / CONFIG.savePerShift);
+    }
+
+    function leftDays(shifts) {
+      if (shifts <= 0) return 0;
+      return Math.ceil(shifts * (CONFIG.totalPlanDays / CONFIG.totalPlanShifts));
+    }
+
+    function finishDate(daysLeft) {
+      const date = new Date();
+      date.setDate(date.getDate() + daysLeft);
+      return date.toLocaleDateString("ru-RU", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit"
+      });
+    }
+
+    function motivation(percent) {
+      if (percent >= 100) return "Цель достигнута. Можно выбирать авто.";
+      if (percent >= 76) return "Финиш рядом. Не сдавайся.";
+      if (percent >= 51) return "Больше половины пути пройдено.";
+      if (percent >= 26) return "Ты уже хорошо продвинулся.";
+      return "Начало положено. Главное — не сбиться.";
+    }
+
+    function mission(percent, shiftsLeft) {
+      if (percent >= 100) return "Финиш закрыт: авто стало не мечтой, а выполненным планом.";
+      if (percent >= 76) return "Финиш рядом: осталось " + number(shiftsLeft) + " смен. Дожать, не обсуждать.";
+      if (percent >= 51) return "Больше половины уже позади. Теперь инерция работает на тебя.";
+      if (percent >= 26) return "Система уже запущена: каждая смена делает авто ближе.";
+      return "Решение уже принято: 3 800 ₽ с каждой смены уходят в авто.";
+    }
+
+    function systemStatus(percent, shiftsLeft, daysLeft) {
+      if (percent >= 100) {
+        return {
+          title: "Статус системы: цель закрыта",
+          text: "План выполнен. Теперь задача — выбирать авто спокойно, без спешки и импульсивных решений."
+        };
+      }
+
+      if (percent >= 76) {
+        return {
+          title: "Статус системы: финальный отрезок",
+          text: "Осталось " + number(shiftsLeft) + " смен. Это уже не старт, а дожимание цели до конца."
+        };
+      }
+
+      if (percent >= 51) {
+        return {
+          title: "Статус системы: точка невозврата",
+          text: "Больше половины пути пройдено. Бросать сейчас дороже, чем спокойно закончить."
+        };
+      }
+
+      if (percent >= 26) {
+        return {
+          title: "Статус системы: набрана инерция",
+          text: "Цель уже стала частью графика. При текущем темпе осталось примерно " + number(daysLeft) + " дней."
+        };
+      }
+
+      return {
+        title: "Статус системы: запуск",
+        text: "Ты не пытаешься накопить. Ты выполняешь систему: смена → 3 800 ₽ в авто → прогресс растёт."
+      };
+    }
+
+    function save() {
+      localStorage.setItem(CONFIG.storageKey, JSON.stringify(state));
+    }
+
+    function load() {
+      try {
+        const raw = localStorage.getItem(CONFIG.storageKey);
+        if (!raw) return;
+
+        const data = JSON.parse(raw);
+
+        if (Number.isFinite(data.workedShifts) && data.workedShifts >= 0) {
+          state.workedShifts = Math.floor(data.workedShifts);
+        }
+
+        if (Array.isArray(data.history)) {
+          state.history = data.history
+            .filter(item => item && item.type && item.date)
+            .slice(-300);
+        }
+      } catch (error) {
+        console.warn("Не удалось загрузить данные:", error);
+      }
+    }
+
+    function render() {
+      const saved = savedMoney();
+      const self = selfMoney();
+      const left = Math.max(CONFIG.goal - saved, 0);
+      const over = Math.max(saved - CONFIG.goal, 0);
+      const percent = progress(saved);
+      const shiftsLeft = leftShifts(saved);
+      const daysLeft = leftDays(shiftsLeft);
+      const status = systemStatus(percent, shiftsLeft, daysLeft);
+
+      el.progressPercent.textContent = percent.toFixed(percent >= 100 ? 0 : 1).replace(".", ",") + "%";
+      el.progressFill.style.width = percent + "%";
+      el.motivationText.textContent = motivation(percent);
+      el.missionText.textContent = mission(percent, shiftsLeft);
+
+      el.savedMoney.textContent = rub(saved);
+      el.leftMoney.textContent = rub(left);
+      el.workedShifts.textContent = number(state.workedShifts);
+      el.leftShifts.textContent = number(shiftsLeft);
+      el.leftDays.textContent = number(daysLeft);
+      el.finishDate.textContent = daysLeft > 0 ? finishDate(daysLeft) : "сейчас";
+      el.selfMoney.textContent = rub(self);
+
+      el.systemTitle.textContent = status.title;
+      el.systemText.textContent = status.text;
+      el.intentLeftShifts.textContent = number(shiftsLeft);
+
+      el.doneBanner.classList.toggle("show", percent >= 100);
+      el.undoShiftBtn.disabled = state.workedShifts <= 0;
+
+      if (over > 0) {
+        el.overGoalNote.textContent = "Сверх цели: " + rub(over);
+      } else {
+        el.overGoalNote.textContent = "До цели";
+      }
+
+      [25, 50, 75, 100].forEach((mark, index) => {
+        el.milestones[index].classList.toggle("done", percent >= mark);
+      });
+
+      renderHistory();
+    }
+
+    function renderHistory() {
+      if (state.history.length === 0) {
+        el.historyList.innerHTML = '<div class="empty">Пока нет смен.<br />Нажми “Добавить смену”, и история появится здесь.</div>';
+        return;
+      }
+
+      const items = [...state.history].reverse().slice(0, 80);
+
+      el.historyList.innerHTML = items.map((item, index) => {
+        const shiftNumber = state.history.length - index;
+        const date = new Date(item.date);
+        const niceDate = date.toLocaleString("ru-RU", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+
+        return `
+          <div class="history-item">
+            <span><strong>Смена #${shiftNumber}</strong><br>${niceDate}</span>
+            <span>+${rub(CONFIG.savePerShift)}</span>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function showToast(text) {
+      el.toast.textContent = text;
+      el.toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => {
+        el.toast.classList.remove("show");
+      }, 1600);
+    }
+
+    function playSound() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioContext();
+        const notes = [523.25, 659.25, 783.99, 1046.5];
+
+        notes.forEach((frequency, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          const start = ctx.currentTime + i * 0.07;
+
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(frequency, start);
+
+          gain.gain.setValueAtTime(0.0001, start);
+          gain.gain.exponentialRampToValueAtTime(0.12, start + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.2);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(start);
+          osc.stop(start + 0.22);
+        });
+      } catch (error) {
+        console.warn("Звук недоступен:", error);
+      }
+    }
+
+    function coins() {
+      el.coinLayer.innerHTML = "";
+
+      for (let i = 0; i < 18; i++) {
+        const coin = document.createElement("div");
+        coin.className = "coin";
+
+        coin.style.left = Math.round(45 + Math.random() * 10) + "%";
+        coin.style.setProperty("--x", Math.round(Math.random() * 320 - 160) + "px");
+        coin.style.setProperty("--y", Math.round(-Math.random() * 470 - 110) + "px");
+        coin.style.animationDelay = Math.round(Math.random() * 70) + "ms";
+
+        el.coinLayer.appendChild(coin);
+      }
+
+      setTimeout(() => {
+        el.coinLayer.innerHTML = "";
+      }, 1050);
+    }
+
+    function addShift() {
+      const before = progress(savedMoney());
+
+      state.workedShifts += 1;
+      state.history.push({
+        type: "shift",
+        date: new Date().toISOString()
+      });
+
+      save();
+      render();
+      playSound();
+      coins();
+
+      const after = progress(savedMoney());
+
+      if (before < 100 && after >= 100) {
+        showToast("Цель достигнута. Можно выбирать авто.");
+      } else {
+        showToast("Решение выполнено: +3 800 ₽ в авто");
+      }
+    }
+
+    function undoShift() {
+      if (state.workedShifts <= 0) return;
+
+      const ok = confirm(
+        "Отменить последнюю смену?\n\nЭто уберёт 3 800 ₽ из авто-плана и 1 010 ₽ из денег себе."
+      );
+
+      if (!ok) return;
+
+      state.workedShifts -= 1;
+      state.history.pop();
+
+      save();
+      render();
+      showToast("Последняя смена отменена");
+    }
+
+    function resetProgress() {
+      const phrase = prompt(
+        "Сброс — это полный откат плана.\n\nЧтобы сбросить прогресс, напиши: СБРОСИТЬ"
+      );
+
+      if (phrase !== "СБРОСИТЬ") {
+        showToast("Сброс отменён");
+        return;
+      }
+
+      state.workedShifts = 0;
+      state.history = [];
+
+      save();
+      render();
+      showToast("Прогресс сброшен");
+    }
+
+    function setTab(tabName) {
+      Object.entries(el.tabs).forEach(([name, panel]) => {
+        panel.classList.toggle("active", name === tabName);
+      });
+
+      el.navBtns.forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === tabName);
+      });
+    }
+
+    function openInstallHelp() {
+      setTab("install");
+      showToast("Открой через Safari и добавь на экран Домой");
+    }
+
+    el.addShiftBtn.addEventListener("click", addShift);
+    el.undoShiftBtn.addEventListener("click", undoShift);
+    el.resetBtn.addEventListener("click", resetProgress);
+    el.installHelpBtn.addEventListener("click", openInstallHelp);
+
+    el.navBtns.forEach(btn => {
+      btn.addEventListener("click", () => setTab(btn.dataset.tab));
+    });
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js")
+          .then(() => console.log("Service Worker активирован"))
+          .catch((error) => console.warn("Service Worker не активирован:", error));
+      });
+    }
+
+    load();
+    render();
+  </script>
+</body>
+</html>

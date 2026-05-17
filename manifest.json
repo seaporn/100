@@ -1,0 +1,31 @@
+{
+  "name": "Авто План",
+  "short_name": "Авто План",
+  "description": "План накопления на авто 350 000 ₽ в режиме неизбежности.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#050816",
+  "theme_color": "#050816",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "finance",
+    "productivity",
+    "lifestyle"
+  ],
+  "lang": "ru"
+}
